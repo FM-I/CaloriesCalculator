@@ -8,6 +8,7 @@ namespace CaloriesCalculator.Repositories
     public class RealtimeDataBase : IDBContext
     {
         private const string ProductsChildName = "Products";
+        private const string CalculateProductsChildName = "CalculateProducts";
         private readonly FirebaseClient _client;
 
         public event Action<string, ProductModel> ProductUpdate;
@@ -48,5 +49,13 @@ namespace CaloriesCalculator.Repositories
             var result = await _client.Child(ProductsChildName).OnceAsync<ProductModel>();
             return result.Select(x => new ProductModel() { Id = x.Key, Name = x.Object.Name, Calories = x.Object.Calories }).ToList();
         }
+    
+        public async Task SaveCalculatedProducts(CalculatedCaloriesData data)
+        {
+            var offset = new DateTimeOffset(DateTime.Now);
+            var value = offset.ToUnixTimeSeconds();
+            await _client.Child(CalculateProductsChildName).Child("Max").Child(value.ToString()).PutAsync(data);
+        }
+    
     }
 }

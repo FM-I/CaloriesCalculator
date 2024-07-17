@@ -60,6 +60,7 @@ namespace CaloriesCalculator.ViewModel
         [RelayCommand]
         private async Task SaveProducts()
         {
+            await _context.SaveCalculatedProducts(new(Products.ToList()));
             await Shell.Current.GoToAsync("..");
         }
     }

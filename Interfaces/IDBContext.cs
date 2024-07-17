@@ -9,5 +9,6 @@ namespace CaloriesCalculator.Interfaces
         Task<List<ProductModel>> GetProducts();
         Task RemoveProduct(string id);
         Task UpdateProduct(ProductModel product);
+        Task SaveCalculatedProducts(CalculatedCaloriesData data);
     }
 }
