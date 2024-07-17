@@ -39,9 +39,19 @@
             </StackLayout>
 
 
-            <Button Text="Add product"
-                    Command="{Binding AddProductCommand}"
-                    HorizontalOptions="FillAndExpand"/>
+            <StackLayout Orientation="Horizontal" Spacing="15">
+                
+                <Button Text="Save"
+                        Command="{Binding SaveProductsCommand}"
+                        HorizontalOptions="FillAndExpand"
+                        IsEnabled="{Binding Products.Count}"/>
+
+                <Button Text="Add product"
+                        Command="{Binding AddProductCommand}"
+                        HorizontalOptions="FillAndExpand"/>
+                
+            </StackLayout>
+            
 
         </StackLayout>
 

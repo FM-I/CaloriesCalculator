@@ -8,13 +8,16 @@ namespace CaloriesCalculator.ViewModel
     {
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(TotalCalories))]
-        private ProductModel product = new();
+        [NotifyPropertyChangedFor(nameof(ProductSelected))]
+        private ProductModel _product = new();
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(TotalCalories))]
-        private double _weight;
+        [NotifyPropertyChangedFor(nameof(ProductSelected))]
+        private double? _weight;
 
-        public double TotalCalories => product == null ? 0 : product.Calories * Weight / 100;
+        public bool ProductSelected => Product != null && Product.Id != default && Weight > 0;
+        public double TotalCalories => Product == null ? 0 : Product.Calories * (double)(Weight == null ? 0 : Weight) / 100;
 
         [RelayCommand]
         private void Tap(ProductModel data)
@@ -28,7 +31,7 @@ namespace CaloriesCalculator.ViewModel
         {
             var data = new ShellNavigationQueryParameters()
             {
-                ["Product"] = new ProductInCalculatorModel(product) { Weight = Weight }
+                ["Product"] = new ProductInCalculatorModel(Product) { Weight = (double)Weight }
             };
 
             await Shell.Current.GoToAsync("..", true, data);

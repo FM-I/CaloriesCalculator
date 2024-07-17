@@ -7,8 +7,9 @@
              xmlns:models="clr-namespace:CaloriesCalculator.Models"
              Title="Add Product">
 
-    <Grid RowDefinitions="*, *, auto" 
-          Padding="10">
+    <Grid RowDefinitions="*, auto, auto" 
+          Padding="10"
+          RowSpacing="15">
 
         <Frame BackgroundColor="GhostWhite">
 
@@ -16,12 +17,12 @@
 
                 <CollectionView.ItemsSource>
                     <x:Array Type="{x:Type models:ProductModel}">
-                        <models:ProductModel Name="Test" Calories="130"/>
-                        <models:ProductModel Name="Test" Calories="120"/>
-                        <models:ProductModel Name="Test" Calories="88"/>
-                        <models:ProductModel Name="Test" Calories="45"/>
-                        <models:ProductModel Name="Test" Calories="95"/>
-                        <models:ProductModel Name="Test" Calories="65"/>
+                        <models:ProductModel Id="1" Name="Test" Calories="130"/>
+                        <models:ProductModel Id="3" Name="Test" Calories="120"/>
+                        <models:ProductModel Id="3" Name="Test" Calories="88"/>
+                        <models:ProductModel Id="4" Name="Test" Calories="45"/>
+                        <models:ProductModel Id="5" Name="Test" Calories="95"/>
+                        <models:ProductModel Id="6" Name="Test" Calories="65"/>
                     </x:Array>
                 </CollectionView.ItemsSource>
 
@@ -45,21 +46,40 @@
 
         </Frame>
 
-        <TableView Grid.Row="1">
-            <TableRoot>
-                <TableSection>
-                    <TextCell Text="Product" Detail="{Binding Product.Name}"/>
-                    <TextCell Text="Calories in 100g" Detail="{Binding Product.Calories}"/>
-                    <EntryCell Label="Weight (g)" Text="{Binding Weight}"/>
-                    <TextCell Text="Total calories" Detail="{Binding TotalCalories}"/>
-                </TableSection>
-            </TableRoot>
-        </TableView>
+        <StackLayout Grid.Row="1"
+                     Orientation="Vertical"
+                     Spacing="15">
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" >
+                <Label Text="{Binding Product.Name}" FontAttributes="Bold"/>
+                <Label Text="{Binding Product.Calories}" FontAttributes="Bold"/>
+                <Label Text="cal. in 100 g." VerticalOptions="Center" FontAttributes="Bold"/>
+            </HorizontalStackLayout>
+            
+            <StackLayout Orientation="Horizontal"
+                         Spacing="10"
+                         HorizontalOptions="CenterAndExpand">
+                
+                <Label Text="Weight" VerticalOptions="Center"/>
+
+                <Entry Text="{Binding Weight}"
+                       Keyboard="Numeric"
+                       TextChanged="Entry_TextChanged"
+                       WidthRequest="100"/>
+
+                <Label Text="g.  =" VerticalOptions="Center"/>
+                <Label Text="{Binding TotalCalories}" VerticalOptions="Center"/>
+                <Label Text="cal." VerticalOptions="Center"/>
+                
+            </StackLayout>
+            
+        </StackLayout>
 
         <Button Grid.Row="2"
                 Text="Add"
                 VerticalOptions="End"
-                Command="{Binding AddCommand}"/>
+                Command="{Binding AddCommand}"
+                IsEnabled="{Binding ProductSelected}"/>
 
     </Grid>
 

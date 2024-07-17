@@ -14,7 +14,7 @@ namespace CaloriesCalculator.ViewModel
         {
             set
             {
-                if(value != null)
+                if (value != null)
                     Products.Add(value);
             }
         }
@@ -24,7 +24,7 @@ namespace CaloriesCalculator.ViewModel
 
         [ObservableProperty]
         private ObservableCollection<ProductInCalculatorModel> _products;
-        
+
         private readonly IDBContext _context;
 
         public CalculateCaloriesViewModel(IDBContext context)
@@ -51,10 +51,16 @@ namespace CaloriesCalculator.ViewModel
         {
             var product = Products.FirstOrDefault(x => x.Id == id);
 
-            if(product != null)
+            if (product != null)
             {
                 Products.Remove(product);
             }
+        }
+
+        [RelayCommand]
+        private async Task SaveProducts()
+        {
+            await Shell.Current.GoToAsync("..");
         }
     }
 }
