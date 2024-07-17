@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CaloriesCalculator.Pages.AddProductPage"
+             xmlns:viewmodel="clr-namespace:CaloriesCalculator.ViewModel"
+             x:DataType="viewmodel:AddProductViewModel"
+             xmlns:models="clr-namespace:CaloriesCalculator.Models"
+             Title="Add Product">
+
+    <Grid RowDefinitions="*, *, auto" 
+          Padding="10">
+
+        <Frame BackgroundColor="GhostWhite">
+
+            <CollectionView Grid.Row="0">
+
+                <CollectionView.ItemsSource>
+                    <x:Array Type="{x:Type models:ProductModel}">
+                        <models:ProductModel Name="Test" Calories="130"/>
+                        <models:ProductModel Name="Test" Calories="120"/>
+                        <models:ProductModel Name="Test" Calories="88"/>
+                        <models:ProductModel Name="Test" Calories="45"/>
+                        <models:ProductModel Name="Test" Calories="95"/>
+                        <models:ProductModel Name="Test" Calories="65"/>
+                    </x:Array>
+                </CollectionView.ItemsSource>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:ProductModel}">
+                        <Grid Padding="0,0,0,5">
+                            <Frame>
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:AddProductViewModel}}, Path=TapCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Name}"/>
+                                    <Label Text="{Binding Calories}" HorizontalOptions="EndAndExpand"/>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Frame>
+
+        <TableView Grid.Row="1">
+            <TableRoot>
+                <TableSection>
+                    <TextCell Text="Product" Detail="{Binding Product.Name}"/>
+                    <TextCell Text="Calories in 100g" Detail="{Binding Product.Calories}"/>
+                    <EntryCell Label="Weight (g)" Text="{Binding Weight}"/>
+                    <TextCell Text="Total calories" Detail="{Binding TotalCalories}"/>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+
+        <Button Grid.Row="2"
+                Text="Add"
+                VerticalOptions="End"
+                Command="{Binding AddCommand}"/>
+
+    </Grid>
+
+</ContentPage>

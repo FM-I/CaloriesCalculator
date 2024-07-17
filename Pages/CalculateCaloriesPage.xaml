@@ -2,18 +2,42 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CaloriesCalculator.Pages.CalculateCaloriesPage"
-             Title="Calculate Calories"
              xmlns:viewmodel="clr-namespace:CaloriesCalculator.ViewModel"
              x:DataType="viewmodel:CalculateCaloriesViewModel"
-             xmlns:models="clr-namespace:CaloriesCalculator.ViewModel">
+             xmlns:models="clr-namespace:CaloriesCalculator.Models">
 
-    <Grid Padding="10"
-          RowDefinitions="Auto, *"
+    <Grid RowDefinitions="auto, *, auto"
           RowSpacing="10">
 
-        <StackLayout Orientation="Horizontal" 
-                     Grid.Row="1" 
-                     VerticalOptions="EndAndExpand">
+        <StackLayout Orientation="Vertical" 
+                     Grid.Row="2" 
+                     VerticalOptions="End"
+                     Padding="10"
+                     Spacing="10"
+                     Background="WhiteSmoke">
+
+            <StackLayout Orientation="Horizontal"
+                         Spacing="10"
+                         HorizontalOptions="End">
+
+                <Label Text="Total:"
+                    FontSize="Subtitle"
+                    FontAttributes="Bold"/>
+                <Label Text="{Binding TotalWeight}"
+                    FontSize="Subtitle"
+                    FontAttributes="Bold"/>
+                <Label Text="g. /"
+                    FontSize="Subtitle"  
+                    FontAttributes="Bold"/>
+                <Label Text="{Binding TotalCalories}"
+                    FontSize="Subtitle"
+                    FontAttributes="Bold"/>
+                <Label Text="cal."
+                    FontSize="Subtitle"  
+                    FontAttributes="Bold"/>
+
+            </StackLayout>
+
 
             <Button Text="Add product"
                     Command="{Binding AddProductCommand}"
@@ -21,29 +45,51 @@
 
         </StackLayout>
 
-        <CollectionView Grid.Row="0" 
+        <Label Text="Products"
+               HorizontalTextAlignment="Center"
+                   FontAttributes="Bold"
+                   FontSize="Title"
+                   Background="WhiteSmoke"
+                   Padding="10"/>
+
+        <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Products}"
                         SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:ProductViewModel">
-                    <Grid Padding="0,5">
-                        <Frame>
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=UpdateProductCommand}"
-                                                      CommandParameter="{Binding .}"/>
-                            </Frame.GestureRecognizers>
 
-                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                <Label Text="{Binding Name}"
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ProductInCalculatorModel">
+                    <Grid Padding="5">
+                        <Frame Padding="0">
+                            <StackLayout Orientation="Vertical" Spacing="5" >
+
+                                <Label Text="{Binding Name}" 
                                        FontSize="18"
+                                       HorizontalTextAlignment="Center" 
                                        HorizontalOptions="FillAndExpand"
-                                       VerticalTextAlignment="Center"/>
-                                <Label Text="{Binding Calories}"
-                                       FontSize="18" 
-                                       VerticalTextAlignment="Center"/>
-                                <Button Text="x"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainViewModel}}, Path=RemoveProductCommand}"
-                                        CommandParameter="{Binding Id}"/>
+                                       FontAttributes="Bold"/>
+
+                                <VerticalStackLayout Spacing="10" Padding="10">
+
+
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Weight:" FontSize="18" VerticalTextAlignment="Center"/>
+                                        <Label Text="{Binding Weight}" FontSize="18" VerticalTextAlignment="Center" HorizontalOptions="EndAndExpand"/>
+                                        <Label Text=" g." FontSize="18" VerticalTextAlignment="Center" />
+                                    </StackLayout>
+
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Total:" FontSize="18" VerticalTextAlignment="Center"/>
+                                        <Label Text="{Binding TotalCalories}" FontSize="18" VerticalTextAlignment="Center" HorizontalOptions="EndAndExpand"/>
+                                        <Label Text=" cal." FontSize="18" VerticalTextAlignment="Center" />
+                                    </StackLayout>
+
+                                    <Button Text="x"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CalculateCaloriesViewModel}}, Path=RemoveProductCommand}"
+                                            CommandParameter="{Binding Id}"
+                                            HorizontalOptions="End"/>
+
+                                </VerticalStackLayout>
+
                             </StackLayout>
                         </Frame>
                     </Grid>

@@ -32,8 +32,11 @@ namespace CaloriesCalculator
             builder.Services.AddTransient<CalculateCaloriesPage>();
             builder.Services.AddTransient<CalculateCaloriesViewModel>();
 
+            builder.Services.AddTransient<AddProductPage>();
+            builder.Services.AddTransient<AddProductViewModel>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
