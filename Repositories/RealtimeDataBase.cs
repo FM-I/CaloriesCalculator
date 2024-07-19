@@ -52,9 +52,13 @@ namespace CaloriesCalculator.Repositories
     
         public async Task SaveCalculatedProducts(CalculatedCaloriesData data)
         {
-            var offset = new DateTimeOffset(DateTime.Now);
+            var offset = new DateTimeOffset(data.Date);
             var value = offset.ToUnixTimeSeconds();
-            await _client.Child(CalculateProductsChildName).Child("Max").Child(value.ToString()).PutAsync(data);
+
+            await _client.Child(CalculateProductsChildName)
+                         .Child("Max")
+                         .Child(value.ToString())
+                         .PutAsync(data);
         }
     
     }

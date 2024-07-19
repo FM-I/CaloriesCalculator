@@ -8,8 +8,9 @@ using System.Collections.ObjectModel;
 namespace CaloriesCalculator.ViewModel
 {
     [QueryProperty("Product", "Product")]
+    [QueryProperty("VisivilityCommands", "VisivilityCommands")]
     public partial class CalculateCaloriesViewModel : ObservableObject
-    {
+    {        
         public ProductInCalculatorModel? Product
         {
             set
@@ -21,6 +22,9 @@ namespace CaloriesCalculator.ViewModel
 
         public double TotalWeight => Products.Sum(p => p.Weight);
         public double TotalCalories => Products.Sum(p => p.TotalCalories);
+
+        [ObservableProperty]
+        private bool _visivilityCommands;
 
         [ObservableProperty]
         private ObservableCollection<ProductInCalculatorModel> _products;
@@ -60,7 +64,7 @@ namespace CaloriesCalculator.ViewModel
         [RelayCommand]
         private async Task SaveProducts()
         {
-            await _context.SaveCalculatedProducts(new(Products.ToList()));
+            await _context.SaveCalculatedProducts(new(Products.ToList()) { Date = DateTime.Now });
             await Shell.Current.GoToAsync("..");
         }
     }

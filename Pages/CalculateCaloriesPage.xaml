@@ -39,7 +39,9 @@
             </StackLayout>
 
 
-            <StackLayout Orientation="Horizontal" Spacing="15">
+            <StackLayout Orientation="Horizontal"
+                         Spacing="15"
+                         IsVisible="{Binding VisivilityCommands}">
                 
                 <Button Text="Save"
                         Command="{Binding SaveProductsCommand}"
@@ -96,7 +98,8 @@
                                     <Button Text="x"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CalculateCaloriesViewModel}}, Path=RemoveProductCommand}"
                                             CommandParameter="{Binding Id}"
-                                            HorizontalOptions="End"/>
+                                            HorizontalOptions="End"
+                                            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CalculateCaloriesViewModel}}, Path=RemoveProductCommand}"/>
 
                                 </VerticalStackLayout>
 

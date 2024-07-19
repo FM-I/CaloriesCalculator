@@ -9,47 +9,14 @@ namespace CaloriesCalculator.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private ObservableCollection<ProductModel> _products;
+    private ObservableCollection<CalcucalteData> _calculateDatas;
     private readonly IDBContext _context;
+
     public MainViewModel(IDBContext context)
     {
         _context = context;
-        _products = new();
-        //_context.ProductUpdate += ProductUpdate;
-
-        //Task.Run(LoadProducts);
+        _calculateDatas = new();
     }
-
-    //private async Task LoadProducts()
-    //{
-    //    foreach (var item in await _context.GetProducts())
-    //    {
-    //        _products.Add(item);
-    //    }
-    //}
-
-    //private void ProductUpdate(string actionType, ProductModel product)
-    //{
-    //    var result = _products.FirstOrDefault(p => p.Id == product.Id);
-
-    //    if (result != null)
-    //    {
-    //        if (actionType == "Delete")
-    //        {
-    //            _products.Remove(result);
-    //        }
-    //        else
-    //        {
-    //            result.Name = product.Name;
-    //            result.Calories = product.Calories;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        _products.Add(product);
-    //    }
-    //}
 
     [RelayCommand]
     private async Task AddProduct()
@@ -75,7 +42,23 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task Calculate()
     {
-        await Shell.Current.GoToAsync(nameof(CalculateCaloriesPage));
+        var values = new ShellNavigationQueryParameters()
+        {
+            ["VisivilityCommands"] = true
+        };
+
+        await Shell.Current.GoToAsync(nameof(CalculateCaloriesPage), values);
+    }
+
+    [RelayCommand]
+    private async Task Tap(CalcucalteData data)
+    {
+        var values = new ShellNavigationQueryParameters()
+        {
+            ["VisivilityCommands"] = false
+        };
+
+        await Shell.Current.GoToAsync(nameof(CalculateCaloriesPage), values);
     }
 
 }

@@ -5,7 +5,7 @@ public class CalculatedCaloriesData
     public List<ProductInCalculatorModel> Products { get; set; }
     public double TotalCalories => Products.Sum(x => x.TotalCalories);
     public double TotalWeight => Products.Sum(x => x.Weight);
-
+    public DateTime Date { get; set; }
 
     public CalculatedCaloriesData(List<ProductInCalculatorModel> products)
     {

@@ -4,11 +4,63 @@
              x:Class="CaloriesCalculator.MainPage"
              xmlns:viewmodel="clr-namespace:CaloriesCalculator.ViewModel"
              x:DataType="viewmodel:MainViewModel"
-             xmlns:models="clr-namespace:CaloriesCalculator.Models">
+             xmlns:models="clr-namespace:CaloriesCalculator.Models"
+             Title="">
 
     <Grid Padding="10"
-          RowDefinitions="Auto, *"
+          RowDefinitions="*, Auto"
           RowSpacing="10">
+
+        <CollectionView>
+            <CollectionView.ItemsSource>
+                <x:Array Type="{x:Type models:CalcucalteData}">
+                    <models:CalcucalteData Date="07.18.2024 08:19" TotalCalories="450" TotalWeight="150"/>
+                    <models:CalcucalteData Date="07.17.2024 08:49" TotalCalories="350" TotalWeight="650"/>
+                    <models:CalcucalteData Date="07.17.2024 14:00" TotalCalories="550" TotalWeight="250"/>
+                    <models:CalcucalteData Date="07.17.2024 20:00" TotalCalories="650" TotalWeight="450"/>
+                </x:Array>
+            </CollectionView.ItemsSource>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:CalcucalteData">
+                    <Grid Padding="0, 5">
+
+                        <Frame Padding="10">
+
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:MainViewModel}}, Path=TapCommand}"
+                                                      CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            
+                            <StackLayout Spacing="10">
+                                <Label Text="{Binding Date}"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"/>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Calories:" FontSize="18"/>
+                                    <Label Text="{Binding TotalCalories}" 
+                                           FontSize="18"
+                                           HorizontalOptions="EndAndExpand"/>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Weight (g.):"
+                                           FontSize="18"/>
+                                    <Label Text="{Binding TotalWeight}"
+                                           FontSize="18"
+                                           HorizontalOptions="EndAndExpand"/>
+                                </StackLayout>
+                                
+                            </StackLayout>
+                        </Frame>
+
+                    </Grid>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
 
         <StackLayout Orientation="Horizontal" 
                      Grid.Row="1" 
