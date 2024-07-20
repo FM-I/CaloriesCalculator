@@ -39,15 +39,17 @@ public partial class ProductViewModel : ObservableObject
         if (Calories <= 0)
             return;
 
+        var data = new ProductModel() { Id = _id, Name = Name, Calories = Calories };
+
         if (string.IsNullOrWhiteSpace(_id))
         {
-            await _context.AddProduct(new() { Name = Name, Calories = Calories});
+            await _context.AddProduct(data);
             Name = string.Empty;
             Calories = 0;
         }
         else
         {
-            await _context.UpdateProduct(new() { Id = _id, Name = Name, Calories = Calories });
+            await _context.UpdateProduct(data);
         }
     }
 }

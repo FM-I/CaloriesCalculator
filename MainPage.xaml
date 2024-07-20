@@ -11,18 +11,9 @@
           RowDefinitions="*, Auto"
           RowSpacing="10">
 
-        <CollectionView>
-            <CollectionView.ItemsSource>
-                <x:Array Type="{x:Type models:CalcucalteData}">
-                    <models:CalcucalteData Date="07.18.2024 08:19" TotalCalories="450" TotalWeight="150"/>
-                    <models:CalcucalteData Date="07.17.2024 08:49" TotalCalories="350" TotalWeight="650"/>
-                    <models:CalcucalteData Date="07.17.2024 14:00" TotalCalories="550" TotalWeight="250"/>
-                    <models:CalcucalteData Date="07.17.2024 20:00" TotalCalories="650" TotalWeight="450"/>
-                </x:Array>
-            </CollectionView.ItemsSource>
-
+        <CollectionView ItemsSource="{Binding CalculatedDatas}">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:CalcucalteData">
+                <DataTemplate x:DataType="models:CalcucaltedTotalData">
                     <Grid Padding="0, 5">
 
                         <Frame Padding="10">
@@ -33,7 +24,8 @@
                             </Frame.GestureRecognizers>
                             
                             <StackLayout Spacing="10">
-                                <Label Text="{Binding Date}"
+                                <Label Text="{Binding Date, 
+                                             StringFormat='{0:dd.MM.yyyy HH:mm}'}"
                                        FontAttributes="Bold"
                                        HorizontalOptions="Center"/>
 

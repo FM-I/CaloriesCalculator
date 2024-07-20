@@ -9,13 +9,44 @@ namespace CaloriesCalculator.ViewModel;
 
 public partial class MainViewModel : ObservableObject
 {
-    private ObservableCollection<CalcucalteData> _calculateDatas;
+    [ObservableProperty]
+    private ObservableCollection<CalcucaltedTotalData> _calculatedDatas;
     private readonly IDBContext _context;
 
     public MainViewModel(IDBContext context)
     {
         _context = context;
-        _calculateDatas = new();
+        _calculatedDatas = new();
+
+        Task.Run(async () =>
+        {
+            var data = await _context.GetCalculatedTotlaData<CalcucaltedTotalData>();
+            var orderData = data.OrderByDescending(x => x.Id);
+
+            foreach (var item in orderData)
+            {
+                var value = _calculatedDatas.FirstOrDefault(x => x.Id == item.Id);
+
+                if(value == null)
+                    _calculatedDatas.Add(item);
+            }
+        });
+
+        _context.CalculatedDataUpdate += CalculatedDataUpdate;
+    }
+
+    private void CalculatedDataUpdate(string action, CalcucaltedTotalData data)
+    {
+        var value = _calculatedDatas.FirstOrDefault(x => x.Id == data.Id);
+
+        if(action == "Delete")
+        {
+            _calculatedDatas.Remove(value);
+        }
+        else if(value == null)
+        {
+            _calculatedDatas.Insert(0, data);
+        }
     }
 
     [RelayCommand]
@@ -51,11 +82,15 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Tap(CalcucalteData data)
+    private async Task Tap(CalcucaltedTotalData data)
     {
+        var products = await _context.GetProductInCalculatedTotalData(data.Id);
+        ObservableCollection<ProductInCalculatorModel> productsData = products != null ? [.. products] : new();
+
         var values = new ShellNavigationQueryParameters()
         {
-            ["VisivilityCommands"] = false
+            ["VisivilityCommands"] = false,
+            ["Products"] = productsData
         };
 
         await Shell.Current.GoToAsync(nameof(CalculateCaloriesPage), values);

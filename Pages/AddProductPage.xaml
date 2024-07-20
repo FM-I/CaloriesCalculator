@@ -4,8 +4,7 @@
              x:Class="CaloriesCalculator.Pages.AddProductPage"
              xmlns:viewmodel="clr-namespace:CaloriesCalculator.ViewModel"
              x:DataType="viewmodel:AddProductViewModel"
-             xmlns:models="clr-namespace:CaloriesCalculator.Models"
-             Title="Add Product">
+             xmlns:models="clr-namespace:CaloriesCalculator.Models">
 
     <Grid RowDefinitions="*, auto, auto" 
           Padding="10"
@@ -13,36 +12,31 @@
 
         <Frame BackgroundColor="GhostWhite">
 
-            <CollectionView Grid.Row="0">
-
-                <CollectionView.ItemsSource>
-                    <x:Array Type="{x:Type models:ProductModel}">
-                        <models:ProductModel Id="1" Name="Test" Calories="130"/>
-                        <models:ProductModel Id="3" Name="Test" Calories="120"/>
-                        <models:ProductModel Id="3" Name="Test" Calories="88"/>
-                        <models:ProductModel Id="4" Name="Test" Calories="45"/>
-                        <models:ProductModel Id="5" Name="Test" Calories="95"/>
-                        <models:ProductModel Id="6" Name="Test" Calories="65"/>
-                    </x:Array>
-                </CollectionView.ItemsSource>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type models:ProductModel}">
-                        <Grid Padding="0,0,0,5">
-                            <Frame>
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:AddProductViewModel}}, Path=TapCommand}"
+            <Grid RowDefinitions="*, auto" RowSpacing="10">
+                
+                <CollectionView Grid.Row="0" ItemsSource="{Binding Products}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type models:ProductModel}">
+                            <Grid Padding="0,0,0,5">
+                                <Frame>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:AddProductViewModel}}, Path=TapCommand}"
                                                           CommandParameter="{Binding .}"/>
-                                </Frame.GestureRecognizers>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Name}"/>
-                                    <Label Text="{Binding Calories}" HorizontalOptions="EndAndExpand"/>
-                                </StackLayout>
-                            </Frame>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{Binding Name}"/>
+                                        <Label Text="{Binding Calories}" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button Grid.Row="1" 
+                        Text="Create product"
+                        Command="{Binding CreateProductCommand}"/>
+            </Grid>
 
         </Frame>
 

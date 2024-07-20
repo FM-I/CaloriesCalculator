@@ -9,6 +9,7 @@ namespace CaloriesCalculator.ViewModel
 {
     [QueryProperty("Product", "Product")]
     [QueryProperty("VisivilityCommands", "VisivilityCommands")]
+    [QueryProperty("Products", "Products")]
     public partial class CalculateCaloriesViewModel : ObservableObject
     {        
         public ProductInCalculatorModel? Product
@@ -20,13 +21,15 @@ namespace CaloriesCalculator.ViewModel
             }
         }
 
-        public double TotalWeight => Products.Sum(p => p.Weight);
-        public double TotalCalories => Products.Sum(p => p.TotalCalories);
+        public double TotalWeight => Math.Round(Products.Sum(p => p.Weight), 2);
+        public double TotalCalories => Math.Round(Products.Sum(p => p.TotalCalories), 2);
 
         [ObservableProperty]
         private bool _visivilityCommands;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(TotalCalories))]
+        [NotifyPropertyChangedFor(nameof(TotalWeight))]
         private ObservableCollection<ProductInCalculatorModel> _products;
 
         private readonly IDBContext _context;
@@ -64,8 +67,9 @@ namespace CaloriesCalculator.ViewModel
         [RelayCommand]
         private async Task SaveProducts()
         {
-            await _context.SaveCalculatedProducts(new(Products.ToList()) { Date = DateTime.Now });
+            await _context.SaveCalculatedProducts(new(Products.ToList()));
             await Shell.Current.GoToAsync("..");
         }
+
     }
 }

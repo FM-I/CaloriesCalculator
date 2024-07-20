@@ -15,6 +15,8 @@ namespace CaloriesCalculator.Models
 
         public double TotalCalories => Math.Round(Weight * (Calories / 100), 2);
 
+        public ProductInCalculatorModel(){}
+
         public ProductInCalculatorModel(ProductModel product)
         {
             Id = product.Id;

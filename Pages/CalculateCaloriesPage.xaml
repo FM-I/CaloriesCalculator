@@ -71,7 +71,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ProductInCalculatorModel">
                     <Grid Padding="5">
-                        <Frame Padding="0">
+                        <Frame Padding="0" BackgroundColor="GhostWhite">
                             <StackLayout Orientation="Vertical" Spacing="5" >
 
                                 <Label Text="{Binding Name}" 
@@ -99,7 +99,7 @@
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CalculateCaloriesViewModel}}, Path=RemoveProductCommand}"
                                             CommandParameter="{Binding Id}"
                                             HorizontalOptions="End"
-                                            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CalculateCaloriesViewModel}}, Path=RemoveProductCommand}"/>
+                                            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CalculateCaloriesViewModel}}, Path=VisivilityCommands}"/>
 
                                 </VerticalStackLayout>
 
