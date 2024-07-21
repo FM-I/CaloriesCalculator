@@ -15,9 +15,17 @@
             
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="models:GroupCalculatedData">
-                    <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
-                           FontSize="18"
-                           FontAttributes="Bold"/>
+
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                    FontSize="18"
+                    FontAttributes="Bold"/>
+                        <Label  Text="{Binding TotalCalories, StringFormat='{0} cal.'}"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                    
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
             

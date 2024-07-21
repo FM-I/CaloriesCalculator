@@ -44,10 +44,9 @@
                      Orientation="Vertical"
                      Spacing="15">
 
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" >
+            <HorizontalStackLayout Spacing="5" HorizontalOptions="Center" >
                 <Label Text="{Binding Product.Name}" FontAttributes="Bold"/>
-                <Label Text="{Binding Product.Calories}" FontAttributes="Bold"/>
-                <Label Text="cal. in 100 g." VerticalOptions="Center" FontAttributes="Bold"/>
+                <Label Text="{Binding Product.Calories, StringFormat='{0} cal. in 100 g.'}" FontAttributes="Bold"/>
             </HorizontalStackLayout>
             
             <StackLayout Orientation="Horizontal"
@@ -61,9 +60,7 @@
                        TextChanged="Entry_TextChanged"
                        WidthRequest="100"/>
 
-                <Label Text="g.  =" VerticalOptions="Center"/>
-                <Label Text="{Binding TotalCalories}" VerticalOptions="Center"/>
-                <Label Text="cal." VerticalOptions="Center"/>
+                <Label Text="{Binding TotalCalories, StringFormat='g. = {0} cal.'}" VerticalOptions="Center"/>
                 
             </StackLayout>
             
