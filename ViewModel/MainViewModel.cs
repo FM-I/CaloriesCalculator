@@ -10,13 +10,14 @@ namespace CaloriesCalculator.ViewModel;
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<CalcucaltedTotalData> _calculatedDatas;
+    private ObservableCollection<GroupCalculatedData> _groupData;
+
     private readonly IDBContext _context;
 
     public MainViewModel(IDBContext context)
     {
         _context = context;
-        _calculatedDatas = new();
+        _groupData = new();
 
         Task.Run(async () =>
         {
@@ -25,10 +26,17 @@ public partial class MainViewModel : ObservableObject
 
             foreach (var item in orderData)
             {
-                var value = _calculatedDatas.FirstOrDefault(x => x.Id == item.Id);
+                var group = _groupData.FirstOrDefault(x => x.Date == new DateOnly(item.Date.Year, item.Date.Month, item.Date.Day));
 
-                if(value == null)
-                    _calculatedDatas.Add(item);
+                if(group == null)
+                {
+                    group = new GroupCalculatedData(item.Date, new() { item });
+                    _groupData.Add(group);
+                }
+                else
+                {
+                    group.Add(item);
+                }
             }
         });
 
@@ -37,15 +45,20 @@ public partial class MainViewModel : ObservableObject
 
     private void CalculatedDataUpdate(string action, CalcucaltedTotalData data)
     {
-        var value = _calculatedDatas.FirstOrDefault(x => x.Id == data.Id);
+        var group = _groupData.FirstOrDefault(x => x.Date == new DateOnly(data.Date.Year, data.Date.Month, data.Date.Day));
 
-        if(action == "Delete")
+        if(group != null)
         {
-            _calculatedDatas.Remove(value);
-        }
-        else if(value == null)
-        {
-            _calculatedDatas.Insert(0, data);
+            var value = group.FirstOrDefault(x => x.Id == data.Id);
+
+            if (action == "Delete")
+            {
+                group.Remove(value);
+            }
+            else if (value == null)
+            {
+                group.Insert(0, data);
+            }
         }
     }
 

@@ -7,16 +7,25 @@
              xmlns:models="clr-namespace:CaloriesCalculator.Models"
              Title="">
 
-    <Grid Padding="10"
-          RowDefinitions="*, Auto"
-          RowSpacing="10">
+    <Grid RowDefinitions="*, Auto"
+          RowSpacing="10"
+          Padding="10">
 
-        <CollectionView ItemsSource="{Binding CalculatedDatas}">
+        <CollectionView ItemsSource="{Binding GroupData}" IsGrouped="True">
+            
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="models:GroupCalculatedData">
+                    <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+            
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:CalcucaltedTotalData">
                     <Grid Padding="0, 5">
 
-                        <Frame Padding="10">
+                        <Frame Padding="10" BackgroundColor="WhiteSmoke">
 
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:MainViewModel}}, Path=TapCommand}"
@@ -25,7 +34,7 @@
                             
                             <StackLayout Spacing="10">
                                 <Label Text="{Binding Date, 
-                                             StringFormat='{0:dd.MM.yyyy HH:mm}'}"
+                                             StringFormat='{0:HH:mm}'}"
                                        FontAttributes="Bold"
                                        HorizontalOptions="Center"/>
 
