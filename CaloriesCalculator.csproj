@@ -21,13 +21,13 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>CaloriesCalculator</ApplicationTitle>
+		<ApplicationTitle>Calories calculator</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.caloriescalculator</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.2</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.3</ApplicationDisplayVersion>
 		<ApplicationVersion>2</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>

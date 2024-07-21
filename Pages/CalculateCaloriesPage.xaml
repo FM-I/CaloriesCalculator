@@ -14,7 +14,7 @@
                      VerticalOptions="End"
                      Padding="10"
                      Spacing="10"
-                     Background="WhiteSmoke">
+                     Background="{AppThemeBinding Light=WhiteSmoke, Dark=Black}">
 
             <StackLayout Orientation="Horizontal"
                          Spacing="10"
@@ -61,7 +61,7 @@
                HorizontalTextAlignment="Center"
                    FontAttributes="Bold"
                    FontSize="Title"
-                   Background="WhiteSmoke"
+                   Background="{AppThemeBinding Light=WhiteSmoke, Dark=Black}"
                    Padding="10"/>
 
         <CollectionView Grid.Row="1"
@@ -71,7 +71,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ProductInCalculatorModel">
                     <Grid Padding="5">
-                        <Frame Padding="0" BackgroundColor="GhostWhite">
+                        <Frame Padding="0" BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark=Black}">
                             <StackLayout Orientation="Vertical" Spacing="5" >
 
                                 <Label Text="{Binding Name}" 
@@ -81,7 +81,6 @@
                                        FontAttributes="Bold"/>
 
                                 <VerticalStackLayout Spacing="10" Padding="10">
-
 
                                     <StackLayout Orientation="Horizontal">
                                         <Label Text="Weight:" FontSize="18" VerticalTextAlignment="Center"/>

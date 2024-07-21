@@ -33,7 +33,7 @@
                 <DataTemplate x:DataType="models:CalcucaltedTotalData">
                     <Grid Padding="0, 5">
 
-                        <Frame Padding="10" BackgroundColor="WhiteSmoke">
+                        <Frame Padding="10" BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark=Black}">
 
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:MainViewModel}}, Path=TapCommand}"

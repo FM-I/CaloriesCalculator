@@ -10,7 +10,7 @@
           Padding="10"
           RowSpacing="15">
 
-        <Frame BackgroundColor="GhostWhite">
+        <Frame BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark=Gray}">
 
             <Grid RowDefinitions="*, auto" RowSpacing="10">
                 
