@@ -17,24 +17,19 @@
                      Background="{AppThemeBinding Light=WhiteSmoke, Dark=Black}">
 
             <StackLayout Orientation="Horizontal"
-                         Spacing="10"
-                         HorizontalOptions="End">
+                         Spacing="10">
 
-                <Label Text="Total:"
-                    FontSize="Subtitle"
-                    FontAttributes="Bold"/>
-                <Label Text="{Binding TotalWeight}"
-                    FontSize="Subtitle"
-                    FontAttributes="Bold"/>
-                <Label Text="g. /"
-                    FontSize="Subtitle"  
-                    FontAttributes="Bold"/>
-                <Label Text="{Binding TotalCalories}"
-                    FontSize="Subtitle"
-                    FontAttributes="Bold"/>
-                <Label Text="cal."
-                    FontSize="Subtitle"  
-                    FontAttributes="Bold"/>
+                <Label FontSize="Subtitle" 
+                       LineBreakMode="WordWrap"
+                       HorizontalOptions="EndAndExpand"
+                       FontAttributes="Bold">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}Total: {0} g. / {1} cal.">
+                            <Binding Path="TotalWeight"/>
+                            <Binding Path="TotalCalories"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
 
             </StackLayout>
 
@@ -83,15 +78,13 @@
                                 <VerticalStackLayout Spacing="10" Padding="10">
 
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="Weight:" FontSize="18" VerticalTextAlignment="Center"/>
-                                        <Label Text="{Binding Weight}" FontSize="18" VerticalTextAlignment="Center" HorizontalOptions="EndAndExpand"/>
-                                        <Label Text=" g." FontSize="18" VerticalTextAlignment="Center" />
+                                        <Label Text="Weight:" FontSize="18" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding Weight, StringFormat='{0} g.'}" FontSize="18" VerticalTextAlignment="Center"/>
                                     </StackLayout>
 
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="Total:" FontSize="18" VerticalTextAlignment="Center"/>
-                                        <Label Text="{Binding TotalCalories}" FontSize="18" VerticalTextAlignment="Center" HorizontalOptions="EndAndExpand"/>
-                                        <Label Text=" cal." FontSize="18" VerticalTextAlignment="Center" />
+                                        <Label Text="Total:" FontSize="18" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand"/>
+                                        <Label Text="{Binding TotalCalories, StringFormat='{0} cal.'}" FontSize="18" VerticalTextAlignment="Center"/>
                                     </StackLayout>
 
                                     <Button Text="x"

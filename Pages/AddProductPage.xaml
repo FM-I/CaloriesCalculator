@@ -23,9 +23,13 @@
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:AddProductViewModel}}, Path=TapCommand}"
                                                           CommandParameter="{Binding .}"/>
                                     </Frame.GestureRecognizers>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="{Binding Name}"/>
-                                        <Label Text="{Binding Calories}" HorizontalOptions="EndAndExpand"/>
+                                    <StackLayout Orientation="Horizontal"
+                                                 Spacing="15">
+                                        <Label Text="{Binding Name}" 
+                                               LineBreakMode="WordWrap" 
+                                               HorizontalOptions="StartAndExpand"
+                                               TextTransform="Uppercase"/>
+                                        <Label Text="{Binding Calories}" LineBreakMode="NoWrap"/>
                                     </StackLayout>
                                 </Frame>
                             </Grid>
@@ -44,11 +48,19 @@
                      Orientation="Vertical"
                      Spacing="15">
 
-            <HorizontalStackLayout Spacing="5" HorizontalOptions="Center" >
-                <Label Text="{Binding Product.Name}" FontAttributes="Bold"/>
-                <Label Text="{Binding Product.Calories, StringFormat='{0} cal. in 100 g.'}" FontAttributes="Bold"/>
-            </HorizontalStackLayout>
-            
+            <Label LineBreakMode="WordWrap"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextTransform="Uppercase">
+                <Label.Text>
+                    <MultiBinding StringFormat="{}{0} {1} cal. in 100 g.">
+                        <Binding Path="Product.Name"/>
+                        <Binding Path="Product.Calories"/>
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
+           
             <StackLayout Orientation="Horizontal"
                          Spacing="10"
                          HorizontalOptions="CenterAndExpand">
@@ -58,7 +70,8 @@
                 <Entry Text="{Binding Weight}"
                        Keyboard="Numeric"
                        TextChanged="Entry_TextChanged"
-                       WidthRequest="100"/>
+                       WidthRequest="100"
+                       MaxLength="4"/>
 
                 <Label Text="{Binding TotalCalories, StringFormat='g. = {0} cal.'}" VerticalOptions="Center"/>
                 
