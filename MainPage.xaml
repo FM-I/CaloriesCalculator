@@ -4,8 +4,7 @@
              x:Class="CaloriesCalculator.MainPage"
              xmlns:viewmodel="clr-namespace:CaloriesCalculator.ViewModel"
              x:DataType="viewmodel:MainViewModel"
-             xmlns:models="clr-namespace:CaloriesCalculator.Models"
-             Title="">
+             xmlns:models="clr-namespace:CaloriesCalculator.Models">
 
     <Grid RowDefinitions="*, Auto"
           RowSpacing="10"
