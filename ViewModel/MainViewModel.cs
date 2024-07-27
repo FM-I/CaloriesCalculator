@@ -19,26 +19,26 @@ public partial class MainViewModel : ObservableObject
         _context = context;
         _groupData = new();
 
-        Task.Run(async () =>
+        var task = Task.Run(() => _context.GetCalculatedTotlaData<CalcucaltedTotalData>());
+        task.Wait();
+
+        var data = task.Result;
+        var orderData = data.OrderByDescending(x => x.Id);
+
+        foreach (var item in orderData)
         {
-            var data = await _context.GetCalculatedTotlaData<CalcucaltedTotalData>();
-            var orderData = data.OrderByDescending(x => x.Id);
+            var group = _groupData.FirstOrDefault(x => x.Date == new DateOnly(item.Date.Year, item.Date.Month, item.Date.Day));
 
-            foreach (var item in orderData)
+            if (group == null)
             {
-                var group = _groupData.FirstOrDefault(x => x.Date == new DateOnly(item.Date.Year, item.Date.Month, item.Date.Day));
-
-                if(group == null)
-                {
-                    group = new GroupCalculatedData(item.Date, new() { item });
-                    _groupData.Add(group);
-                }
-                else
-                {
-                    group.Add(item);
-                }
+                group = new GroupCalculatedData(item.Date, new() { item });
+                _groupData.Add(group);
             }
-        });
+            else
+            {
+                group.Add(item);
+            }
+        }
 
         _context.CalculatedDataUpdate += CalculatedDataUpdate;
     }

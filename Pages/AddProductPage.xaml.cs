@@ -1,14 +1,15 @@
 using CaloriesCalculator.ViewModel;
-using System.Text.RegularExpressions;
 
 namespace CaloriesCalculator.Pages;
 
 public partial class AddProductPage : ContentPage
 {
+	private readonly AddProductViewModel _viewModel;
 	public AddProductPage(AddProductViewModel vm)
 	{
 		InitializeComponent();
 		BindingContext = vm;
+		_viewModel = vm;
 	}
 
     private void Entry_TextChanged(object sender, TextChangedEventArgs e)
@@ -18,6 +19,18 @@ public partial class AddProductPage : ContentPage
 		if (string.IsNullOrWhiteSpace(e.NewTextValue))
 		{
 			vm.Weight = null;
+		}
+    }
+
+    private void Search_TextChanged(object sender, TextChangedEventArgs e)
+    {
+		if (string.IsNullOrWhiteSpace(e.NewTextValue))
+		{
+			ProductList.ItemsSource = _viewModel.Products;
+		}
+		else
+		{
+			ProductList.ItemsSource = _viewModel.Products.Where(x => x.Name.ToLower().Contains(e.NewTextValue.ToLower()));
 		}
     }
 }

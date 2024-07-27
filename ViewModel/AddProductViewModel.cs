@@ -22,6 +22,9 @@ public partial class AddProductViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<ProductModel> _products;
 
+    [ObservableProperty]
+    private string _title;
+
     private readonly IDBContext _context;
 
     public bool ProductSelected => Product != null && Product.Id != default && Weight > 0;
@@ -30,15 +33,11 @@ public partial class AddProductViewModel : ObservableObject
     public AddProductViewModel(IDBContext context)
     {
         _context = context;
-        _products = new();
 
         Task.Run(async () =>
         {
-            foreach (var item in await _context.GetProducts())
-            {
-                _products.Add(item);
-            }
-
+            var products = await _context.GetProducts();
+            Products = new(products.OrderBy(x => x.Name).ToList());
         });
 
         _context.ProductUpdate += ProductUpdate;
@@ -46,15 +45,15 @@ public partial class AddProductViewModel : ObservableObject
 
     private void ProductUpdate(string action, ProductModel data)
     {
-        var value = _products.FirstOrDefault(x => x.Id == data.Id);
+        var value = Products.FirstOrDefault(x => x.Id == data.Id);
 
         if(action == "Delete")
         {
-            _products.Remove(value);
+            Products.Remove(value);
         }
         else 
         {
-            _products.Insert(0, data);
+            Products.Insert(0, data);
         }
     }
 

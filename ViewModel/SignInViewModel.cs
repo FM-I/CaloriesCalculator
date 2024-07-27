@@ -12,6 +12,18 @@ namespace CaloriesCalculator.ViewModel
         public SignInViewModel(FirebaseAuthClient authClient)
         {
             _authClient = authClient;
+            
+            if (_authClient.User != null)
+            {
+                //if (_authClient.User?.Credential.Created.AddSeconds(_authClient.User.Credential.ExpiresIn) < DateTime.Now)
+                //{
+                //    _authClient.SignOut();
+                //}
+                //else
+                //{
+                Shell.Current.GoToAsync($"{nameof(MainPage)}").Wait();
+                //}
+            }
         }
 
         [ObservableProperty]
@@ -23,7 +35,22 @@ namespace CaloriesCalculator.ViewModel
         [RelayCommand]
         private async Task SignIn()
         {
-            var result = await _authClient.SignInWithEmailAndPasswordAsync(Email, Password);
+            try
+            {
+                var result = await _authClient.SignInWithEmailAndPasswordAsync(Email, Password);
+
+                await Shell.Current.GoToAsync(nameof(MainPage));
+
+            }
+            catch (FirebaseAuthHttpException e)
+            {
+                await Shell.Current.DisplayAlert("Error", "Login or password incorrect!", "OK");
+            }
+            catch (Exception e) 
+            {
+                await Shell.Current.DisplayAlert("Error", e.Message, "OK");
+            }
+
         }
 
         [RelayCommand]

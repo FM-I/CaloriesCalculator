@@ -1,5 +1,6 @@
 ﻿using CaloriesCalculator.Interfaces;
 using CaloriesCalculator.Models;
+using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System.Reactive.Linq;
@@ -11,13 +12,15 @@ namespace CaloriesCalculator.Repositories
         private const string ProductsChildName = "Products";
         private const string CalculateProductsChildName = "CalculateProducts";
         private readonly FirebaseClient _client;
+        private readonly FirebaseAuthClient _authClient;
 
         public event Action<string, ProductModel> ProductUpdate;
         public event Action<string, CalcucaltedTotalData> CalculatedDataUpdate;
 
-        public RealtimeDataBase(string path)
+        public RealtimeDataBase(FirebaseAuthClient authClient)
         {
-            _client = new FirebaseClient(path);
+            _client = new FirebaseClient("https://education-project-7ab74-default-rtdb.europe-west1.firebasedatabase.app/");
+            _authClient = authClient;
 
             _client.Child(ProductsChildName)
                 .AsObservable<ProductModel>()
@@ -30,13 +33,16 @@ namespace CaloriesCalculator.Repositories
                     }
                 });
 
-            _client.Child(CalculateProductsChildName)
-                .Child("Max")
-                .AsObservable<CalcucaltedTotalData>()
-                .Subscribe(data =>
-                {
-                    CalculatedDataUpdate?.Invoke(data.EventType.ToString(), data.Object);
-                });
+            if(_authClient.User != null)
+            {
+                _client.Child(CalculateProductsChildName)
+                        .Child(_authClient.User.Uid)
+                        .AsObservable<CalcucaltedTotalData>()
+                        .Subscribe(data =>
+                        {
+                            CalculatedDataUpdate?.Invoke(data.EventType.ToString(), data.Object);
+                        });
+            }
         }
 
         public async Task AddProduct(ProductModel product)
@@ -67,14 +73,14 @@ namespace CaloriesCalculator.Repositories
             data.Id = value;
 
             await _client.Child(CalculateProductsChildName)
-                         .Child("Max")
+                         .Child(_authClient.User.Uid)
                          .Child(value.ToString())
                          .PutAsync(data);
         }
 
         public async Task<List<T>> GetCalculatedTotlaData<T>()
         {
-            var data = await _client.Child(CalculateProductsChildName).Child("Max").OnceAsync<T>();
+            var data = await _client.Child(CalculateProductsChildName).Child(_authClient.User.Uid).OnceAsync<T>();
             return data
                 .Select(x => x.Object)
                 .ToList();
@@ -83,7 +89,7 @@ namespace CaloriesCalculator.Repositories
         public async Task<List<ProductInCalculatorModel>> GetProductInCalculatedTotalData(long id)
         {
             var result = await _client.Child(CalculateProductsChildName)
-                .Child("Max")
+                .Child(_authClient.User.Uid)
                 .Child(id.ToString())
                 .OnceSingleAsync<CalculatedCaloriesData>();
 

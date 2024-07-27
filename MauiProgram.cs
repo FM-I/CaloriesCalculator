@@ -25,10 +25,6 @@ namespace CaloriesCalculator
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<MainViewModel>();
 
-            builder.Services.AddSingleton<IDBContext>(
-                new RealtimeDataBase("https://education-project-7ab74-default-rtdb.europe-west1.firebasedatabase.app/")
-                );
-
             builder.Services.AddTransient<ProductPage>();
             builder.Services.AddTransient<ProductViewModel>();
             
@@ -58,6 +54,8 @@ namespace CaloriesCalculator
                 },
                 UserRepository = new FileUserRepository("Storage")
             }));
+
+            builder.Services.AddSingleton<IDBContext, RealtimeDataBase>();
 
             return builder.Build();
         }
