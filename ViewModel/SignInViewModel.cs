@@ -21,7 +21,7 @@ namespace CaloriesCalculator.ViewModel
                 //}
                 //else
                 //{
-                Shell.Current.GoToAsync($"{nameof(MainPage)}").Wait();
+                Task.Run(async () => await Shell.Current.GoToAsync($"//{nameof(MainPage)}"));
                 //}
             }
         }
@@ -39,7 +39,7 @@ namespace CaloriesCalculator.ViewModel
             {
                 var result = await _authClient.SignInWithEmailAndPasswordAsync(Email, Password);
 
-                await Shell.Current.GoToAsync(nameof(MainPage));
+                await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
 
             }
             catch (FirebaseAuthHttpException e)

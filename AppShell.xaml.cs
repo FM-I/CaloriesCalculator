@@ -15,15 +15,5 @@ namespace CaloriesCalculator
             Routing.RegisterRoute(nameof(SignInPage), typeof(SignInPage));
             Routing.RegisterRoute(nameof(SignUpPage), typeof(SignUpPage));
         }
-
-        protected override void OnNavigating(ShellNavigatingEventArgs args)
-        {
-            base.OnNavigating(args);
-
-            if (args.Source == ShellNavigationSource.PopToRoot)
-            {
-                args.Cancel();
-            }
-        }
     }
 }
