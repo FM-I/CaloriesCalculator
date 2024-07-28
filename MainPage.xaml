@@ -6,11 +6,15 @@
              x:DataType="viewmodel:MainViewModel"
              xmlns:models="clr-namespace:CaloriesCalculator.Models">
 
-    <Grid RowDefinitions="*, Auto"
+    <Grid RowDefinitions="Auto, *, Auto"
           RowSpacing="10"
           Padding="10">
 
-        <CollectionView ItemsSource="{Binding GroupData}" IsGrouped="True">
+        <StackLayout Orientation="Horizontal">
+            
+        </StackLayout>
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding GroupData}" IsGrouped="True">
             
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="models:GroupCalculatedData">
@@ -71,13 +75,17 @@
         </CollectionView>
 
         <StackLayout Orientation="Horizontal" 
-                     Grid.Row="1" 
-                     VerticalOptions="EndAndExpand">
+                     Grid.Row="2" 
+                     VerticalOptions="EndAndExpand"
+                     Spacing="15">
 
+            <Button Text="Sign out" FontAttributes="Bold" Command="{Binding SignOutCommand}" HorizontalOptions="FillAndExpand"/>
+            
             <Button Text="Calculate callories"
                     Command="{Binding CalculateCommand}"
                     HorizontalOptions="FillAndExpand"/>
 
+            
         </StackLayout>
 
     </Grid>

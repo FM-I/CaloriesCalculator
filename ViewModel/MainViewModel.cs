@@ -3,6 +3,7 @@ using CaloriesCalculator.Models;
 using CaloriesCalculator.Pages;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Auth;
 using System.Collections.ObjectModel;
 
 namespace CaloriesCalculator.ViewModel;
@@ -13,10 +14,12 @@ public partial class MainViewModel : ObservableObject
     private ObservableCollection<GroupCalculatedData> _groupData;
 
     private readonly IDBContext _context;
+    private readonly FirebaseAuthClient _authClient;
 
-    public MainViewModel(IDBContext context)
+    public MainViewModel(IDBContext context, FirebaseAuthClient client)
     {
         _context = context;
+        _authClient = client;
         _groupData = new();
 
         var task = Task.Run(() => _context.GetCalculatedTotlaData<CalcucaltedTotalData>());
@@ -109,4 +112,15 @@ public partial class MainViewModel : ObservableObject
         await Shell.Current.GoToAsync(nameof(CalculateCaloriesPage), values);
     }
 
+    [RelayCommand]
+    private async Task SignOut()
+    {
+        bool answer = await Shell.Current.DisplayAlert("Sign Out", "Do you want to leave?", "Yes", "No");
+
+        if (answer)
+        {
+            _authClient.SignOut();
+            await Shell.Current.GoToAsync("//AuthPage");
+        }
+    }
 }

@@ -14,11 +14,11 @@
 
             <Grid RowDefinitions="*, auto, auto" RowSpacing="10">
                 
-                <CollectionView x:Name="ProductList" Grid.Row="0" ItemsSource="{Binding Products}">
+                <CollectionView x:Name="ProductList" Grid.Row="0" ItemsSource="{Binding Products}" SelectionMode="None">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type models:ProductModel}">
+                        <DataTemplate x:DataType="{x:Type models:SelectedItemProductModel}">
                             <Grid Padding="0,0,0,5">
-                                <Frame>
+                                <Frame BackgroundColor="{Binding SelectedColor}">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:AddProductViewModel}}, Path=TapCommand}"
                                                           CommandParameter="{Binding .}"/>

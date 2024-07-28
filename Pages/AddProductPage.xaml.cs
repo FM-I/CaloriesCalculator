@@ -5,6 +5,8 @@ namespace CaloriesCalculator.Pages;
 public partial class AddProductPage : ContentPage
 {
 	private readonly AddProductViewModel _viewModel;
+	private Frame? _previousSelectedItem;
+
 	public AddProductPage(AddProductViewModel vm)
 	{
 		InitializeComponent();
@@ -33,4 +35,5 @@ public partial class AddProductPage : ContentPage
 			ProductList.ItemsSource = _viewModel.Products.Where(x => x.Name.ToLower().Contains(e.NewTextValue.ToLower()));
 		}
     }
+
 }

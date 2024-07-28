@@ -12,7 +12,7 @@ public partial class AddProductViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TotalCalories))]
     [NotifyPropertyChangedFor(nameof(ProductSelected))]
-    private ProductModel _product = new();
+    private SelectedItemProductModel? _product;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TotalCalories))]
@@ -20,7 +20,7 @@ public partial class AddProductViewModel : ObservableObject
     private double? _weight;
 
     [ObservableProperty]
-    private ObservableCollection<ProductModel> _products;
+    private ObservableCollection<SelectedItemProductModel> _products;
 
     [ObservableProperty]
     private string _title;
@@ -37,7 +37,14 @@ public partial class AddProductViewModel : ObservableObject
         Task.Run(async () =>
         {
             var products = await _context.GetProducts();
-            Products = new(products.OrderBy(x => x.Name).ToList());
+            Products = new(products.OrderBy(x => x.Name)
+                .Select(x => new SelectedItemProductModel() 
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Calories = x.Calories
+                })
+                .ToList());
         });
 
         _context.ProductUpdate += ProductUpdate;
@@ -53,15 +60,28 @@ public partial class AddProductViewModel : ObservableObject
         }
         else 
         {
-            Products.Insert(0, data);
+            Products.Insert(0, new SelectedItemProductModel()
+            {
+                Id = data.Id,
+                Name = data.Name,
+                Calories = data.Calories
+            });
         }
     }
 
     [RelayCommand]
-    private void Tap(ProductModel data)
+    private void Tap(SelectedItemProductModel data)
     {
         if (data != null)
+        {
+            if(Product != null)
+            {
+                Product.IsSelected = false;
+            }
+
             Product = data;
+            Product.IsSelected = true;
+        }
     }
 
     [RelayCommand]
