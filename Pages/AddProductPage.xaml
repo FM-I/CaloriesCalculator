@@ -41,12 +41,13 @@
                         Text="Create product"
                         Command="{Binding CreateProductCommand}"/>
 
-                <Entry Grid.Row="2" 
-                       x:Name="Search"
-                       Placeholder="Search" 
-                       Background="White" 
-                       ClearButtonVisibility="WhileEditing" 
-                       TextChanged="Search_TextChanged"/>
+                <Grid Grid.Row="2">
+                    <Entry Placeholder="Search" 
+                            Background="White" 
+                            ClearButtonVisibility="WhileEditing" 
+                            TextChanged="Search_TextChanged"/>
+                </Grid>
+                
                 
             </Grid>
 
