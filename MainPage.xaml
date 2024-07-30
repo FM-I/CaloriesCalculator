@@ -10,7 +10,10 @@
           RowSpacing="10"
           Padding="10">
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding GroupData}" IsGrouped="True">
+        <CollectionView x:Name="GroupView"
+                        Grid.Row="1" 
+                        ItemsSource="{Binding GroupData}" 
+                        IsGrouped="True">
             
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="models:GroupCalculatedData">

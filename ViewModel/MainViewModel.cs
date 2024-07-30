@@ -16,6 +16,8 @@ public partial class MainViewModel : ObservableObject
     private readonly IDBContext _context;
     private readonly FirebaseAuthClient _authClient;
 
+    public event Action<string> GroupChanged;
+
     public MainViewModel(IDBContext context, FirebaseAuthClient client)
     {
         _context = context;
@@ -64,16 +66,22 @@ public partial class MainViewModel : ObservableObject
         if (action == "Delete" && value != null)
         {
             group.Remove(value);
+
+            if (group.Count == 0)
+            {
+                GroupData.Remove(group);
+            }
         }
         else if (value == null)
         {
             group.Insert(0, data);
         }
-
-        if (group.Count == 0)
+        else
         {
-            GroupData.Remove(group);
+            return;
         }
+
+        GroupChanged?.Invoke(action);
     }
 
     [RelayCommand]
