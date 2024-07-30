@@ -20,48 +20,59 @@ public partial class MainViewModel : ObservableObject
     {
         _context = context;
         _authClient = client;
-        _groupData = new();
 
         var task = Task.Run(() => _context.GetCalculatedTotlaData<CalcucaltedTotalData>());
         task.Wait();
 
         var data = task.Result;
         var orderData = data.OrderByDescending(x => x.Id);
+        var groups = new List<GroupCalculatedData>();
 
         foreach (var item in orderData)
         {
-            var group = _groupData.FirstOrDefault(x => x.Date == new DateOnly(item.Date.Year, item.Date.Month, item.Date.Day));
+            var group = groups.FirstOrDefault(x => x.Date.Year == item.Date.Year
+                                                   && x.Date.Month == item.Date.Month
+                                                   && x.Date.Day == item.Date.Day);
 
             if (group == null)
             {
-                group = new GroupCalculatedData(item.Date, new() { item });
-                _groupData.Add(group);
+                group = new GroupCalculatedData(item.Date, new());
+                groups.Add(group);
             }
-            else
-            {
-                group.Add(item);
-            }
+
+            group.Add(item);
         }
 
+        GroupData = new(groups);
         _context.CalculatedDataUpdate += CalculatedDataUpdate;
     }
 
     private void CalculatedDataUpdate(string action, CalcucaltedTotalData data)
     {
-        var group = _groupData.FirstOrDefault(x => x.Date == new DateOnly(data.Date.Year, data.Date.Month, data.Date.Day));
+        var group = GroupData.FirstOrDefault(x => x.Date.Year == data.Date.Year
+                                                   && x.Date.Month == data.Date.Month
+                                                   && x.Date.Day == data.Date.Day);
 
-        if(group != null)
+        if (group == null)
         {
-            var value = group.FirstOrDefault(x => x.Id == data.Id);
+            group = new GroupCalculatedData(data.Date, new());
+            GroupData.Insert(0, group);
+        }
 
-            if (action == "Delete")
-            {
-                group.Remove(value);
-            }
-            else if (value == null)
-            {
-                group.Insert(0, data);
-            }
+        var value = group.FirstOrDefault(x => x.Id == data.Id);
+
+        if (action == "Delete" && value != null)
+        {
+            group.Remove(value);
+        }
+        else if (value == null)
+        {
+            group.Insert(0, data);
+        }
+
+        if (group.Count == 0)
+        {
+            GroupData.Remove(group);
         }
     }
 
@@ -76,7 +87,7 @@ public partial class MainViewModel : ObservableObject
     {
         await _context.RemoveProduct(id);
     }
-    
+
     [RelayCommand]
     private async Task UpdateProduct(ProductModel data)
     {

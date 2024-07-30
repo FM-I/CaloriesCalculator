@@ -10,10 +10,6 @@
           RowSpacing="10"
           Padding="10">
 
-        <StackLayout Orientation="Horizontal">
-            
-        </StackLayout>
-
         <CollectionView Grid.Row="1" ItemsSource="{Binding GroupData}" IsGrouped="True">
             
             <CollectionView.GroupHeaderTemplate>
