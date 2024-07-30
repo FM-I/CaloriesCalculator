@@ -60,12 +60,21 @@ public partial class AddProductViewModel : ObservableObject
         }
         else 
         {
-            Products.Insert(0, new SelectedItemProductModel()
+
+            if(value == null)
             {
-                Id = data.Id,
-                Name = data.Name,
-                Calories = data.Calories
-            });
+                Products.Insert(0, new SelectedItemProductModel()
+                {
+                    Id = data.Id,
+                    Name = data.Name,
+                    Calories = data.Calories
+                });
+            }
+            else
+            {
+                value.Name = data.Name;
+                value.Calories = data.Calories;
+            }
         }
     }
 
@@ -99,5 +108,16 @@ public partial class AddProductViewModel : ObservableObject
     private async Task CreateProduct()
     {
         await Shell.Current.GoToAsync(nameof(ProductPage));
+    }
+
+    [RelayCommand]
+    private async Task UpdateProduct(SelectedItemProductModel data)
+    {
+        var queryParams = new ShellNavigationQueryParameters()
+        {
+            ["Product"] = new ProductModel() { Id = data.Id, Name = data.Name, Calories = data.Calories }
+        };
+
+        await Shell.Current.GoToAsync(nameof(ProductPage), queryParams);
     }
 }

@@ -44,12 +44,14 @@ public partial class ProductViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(_id))
         {
             await _context.AddProduct(data);
+            await Shell.Current.DisplayAlert("Success", "Proudct add!", "Ok");
             Name = string.Empty;
             Calories = 0;
         }
         else
         {
             await _context.UpdateProduct(data);
+            await Shell.Current.DisplayAlert("Success", "Proudct update!", "Ok");
         }
     }
 }

@@ -28,8 +28,16 @@
                                         <Label Text="{Binding Name}" 
                                                LineBreakMode="WordWrap" 
                                                HorizontalOptions="StartAndExpand"
-                                               TextTransform="Uppercase"/>
-                                        <Label Text="{Binding Calories}" LineBreakMode="NoWrap"/>
+                                               TextTransform="Uppercase"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="{Binding Calories}" LineBreakMode="NoWrap" VerticalOptions="Center"/>
+                                        <ImageButton Source="edit.png" 
+                                                     HorizontalOptions="Center" 
+                                                     VerticalOptions="Center" 
+                                                     WidthRequest="15" 
+                                                     HeightRequest="15"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:AddProductViewModel}}, Path=UpdateProductCommand}"
+                                                     CommandParameter="{Binding .}"/>
                                     </StackLayout>
                                 </Frame>
                             </Grid>
