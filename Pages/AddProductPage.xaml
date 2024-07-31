@@ -51,7 +51,7 @@
 
                 <Grid Grid.Row="2">
                     <Entry Placeholder="Search" 
-                            Background="White" 
+                            Background="{AppThemeBinding Light=White, Dark=#383838}" 
                             ClearButtonVisibility="WhileEditing" 
                             TextChanged="Search_TextChanged"/>
                 </Grid>
