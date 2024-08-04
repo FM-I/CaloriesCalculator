@@ -19,8 +19,8 @@ namespace CaloriesCalculator.Repositories
 
         public RealtimeDataBase(FirebaseAuthClient authClient)
         {
-            _client = new FirebaseClient("https://education-project-7ab74-default-rtdb.europe-west1.firebasedatabase.app/");
             _authClient = authClient;
+            _client = new FirebaseClient("https://education-project-7ab74-default-rtdb.europe-west1.firebasedatabase.app/");
 
             _client.Child(ProductsChildName)
                 .AsObservable<ProductModel>()
@@ -33,7 +33,7 @@ namespace CaloriesCalculator.Repositories
                     }
                 });
 
-            if(_authClient.User != null)
+            if (_authClient.User != null)
             {
                 _client.Child(CalculateProductsChildName)
                         .Child(_authClient.User.Uid)
@@ -78,10 +78,23 @@ namespace CaloriesCalculator.Repositories
                          .PutAsync(data);
         }
 
-        public async Task<List<T>> GetCalculatedTotlaData<T>()
+        public async Task<List<T>> GetCalculatedTotalData<T>(string startId)
         {
-            var data = await _client.Child(CalculateProductsChildName).Child(_authClient.User.Uid).OnceAsync<T>();
-            return data
+            var orderQuery = _client
+                .Child(CalculateProductsChildName)
+                .Child(_authClient.User.Uid)
+                .OrderByKey();
+
+            FilterQuery filterQuery;
+
+            if (!string.IsNullOrWhiteSpace(startId))
+                filterQuery = orderQuery.EndAt(startId).LimitToLast(20);
+            else
+                filterQuery = orderQuery.LimitToLast(20);
+
+            var result = await filterQuery.OnceAsync<T>();
+
+            return result
                 .Select(x => x.Object)
                 .ToList();
         }

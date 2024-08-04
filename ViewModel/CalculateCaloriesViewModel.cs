@@ -67,8 +67,23 @@ namespace CaloriesCalculator.ViewModel
         [RelayCommand]
         private async Task SaveProducts()
         {
-            await _context.SaveCalculatedProducts(new(Products.ToList()));
-            await Shell.Current.GoToAsync("..");
+            var data = new CalculatedCaloriesData(Products.ToList());
+            
+            await _context.SaveCalculatedProducts(data);
+
+            var totalData = new CalcucaltedTotalData()
+            {
+                Id = data.Id,
+                TotalCalories = data.TotalCalories,
+                TotalWeight = data.TotalWeight
+            };
+
+            var queryParams = new ShellNavigationQueryParameters()
+            {
+                ["data"] = totalData
+            };
+
+            await Shell.Current.GoToAsync("..", queryParams);
         }
 
     }

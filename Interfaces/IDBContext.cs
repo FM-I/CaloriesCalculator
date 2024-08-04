@@ -12,7 +12,7 @@ namespace CaloriesCalculator.Interfaces
         Task RemoveProduct(string id);
         Task UpdateProduct(ProductModel product);
         Task SaveCalculatedProducts(CalculatedCaloriesData data);
-        Task<List<T>> GetCalculatedTotlaData<T>();
+        Task<List<T>> GetCalculatedTotalData<T>(string startId);
         Task<List<ProductInCalculatorModel>> GetProductInCalculatedTotalData(long id);
     }
 }

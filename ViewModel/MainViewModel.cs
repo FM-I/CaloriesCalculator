@@ -8,62 +8,66 @@ using System.Collections.ObjectModel;
 
 namespace CaloriesCalculator.ViewModel;
 
+[QueryProperty("TotalData", "data")]
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
     private ObservableCollection<GroupCalculatedData> _groupData;
 
+    public CalcucaltedTotalData TotalData { 
+        set
+        {
+            var group = GroupData.FirstOrDefault(x => x.Date.Year == value.Date.Year
+                                                   && x.Date.Month == value.Date.Month
+                                                   && x.Date.Day == value.Date.Day);
+
+            if (group == null)
+            {
+                group = new GroupCalculatedData(value.Date, new());
+                GroupData.Add(group);
+            }
+
+            if (group.FirstOrDefault(x => x.Id == value.Id) == null)
+            {
+                group.Insert(0, value);
+            }
+
+            GroupChanged?.Invoke("InsertOrUpdate");
+        } 
+    }
+
     private readonly IDBContext _context;
     private readonly FirebaseAuthClient _authClient;
 
     public event Action<string> GroupChanged;
+    private string _startId = string.Empty;
 
     public MainViewModel(IDBContext context, FirebaseAuthClient client)
     {
         _context = context;
         _authClient = client;
+        GroupData = new();
 
-        var task = Task.Run(() => _context.GetCalculatedTotlaData<CalcucaltedTotalData>());
+        var task = Task.Run(UpdateCollection);
         task.Wait();
-
-        var data = task.Result;
-        var orderData = data.OrderByDescending(x => x.Id);
-        var groups = new List<GroupCalculatedData>();
-
-        foreach (var item in orderData)
-        {
-            var group = groups.FirstOrDefault(x => x.Date.Year == item.Date.Year
-                                                   && x.Date.Month == item.Date.Month
-                                                   && x.Date.Day == item.Date.Day);
-
-            if (group == null)
-            {
-                group = new GroupCalculatedData(item.Date, new());
-                groups.Add(group);
-            }
-
-            group.Add(item);
-        }
-
-        GroupData = new(groups);
         _context.CalculatedDataUpdate += CalculatedDataUpdate;
     }
 
     private void CalculatedDataUpdate(string action, CalcucaltedTotalData data)
     {
+        if (action != "Delete")
+            return;
+
         var group = GroupData.FirstOrDefault(x => x.Date.Year == data.Date.Year
                                                    && x.Date.Month == data.Date.Month
                                                    && x.Date.Day == data.Date.Day);
 
         if (group == null)
-        {
-            group = new GroupCalculatedData(data.Date, new());
-            GroupData.Insert(0, group);
-        }
+            return;
 
         var value = group.FirstOrDefault(x => x.Id == data.Id);
 
-        if (action == "Delete" && value != null)
+        if (value != null)
         {
             group.Remove(value);
 
@@ -72,16 +76,6 @@ public partial class MainViewModel : ObservableObject
                 GroupData.Remove(group);
             }
         }
-        else if (value == null)
-        {
-            group.Insert(0, data);
-        }
-        else
-        {
-            return;
-        }
-
-        GroupChanged?.Invoke(action);
     }
 
     [RelayCommand]
@@ -142,4 +136,36 @@ public partial class MainViewModel : ObservableObject
             await Shell.Current.GoToAsync("//AuthPage");
         }
     }
+
+    [RelayCommand]
+    private async Task UpdateCollection()
+    {
+        var data = await _context.GetCalculatedTotalData<CalcucaltedTotalData>(_startId);
+        var orderData = data.OrderByDescending(x => x.Id);
+        var groups = new List<GroupCalculatedData>();
+
+        foreach (var item in orderData)
+        {
+            var group = GroupData.FirstOrDefault(x => x.Date.Year == item.Date.Year
+                                                   && x.Date.Month == item.Date.Month
+                                                   && x.Date.Day == item.Date.Day);
+
+            if (group == null)
+            {
+                group = new GroupCalculatedData(item.Date, new());
+                GroupData.Add(group);
+            }
+
+            if(group.FirstOrDefault(x => x.Id == item.Id) == null)
+            {
+                group.Add(item);
+            }
+        }
+
+        if (orderData.Count() != 0)
+        {
+            _startId = orderData.Last().Id.ToString();
+        }
+    }
+
 }

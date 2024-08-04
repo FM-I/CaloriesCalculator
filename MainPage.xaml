@@ -13,7 +13,9 @@
         <CollectionView x:Name="GroupView"
                         Grid.Row="1" 
                         ItemsSource="{Binding GroupData}" 
-                        IsGrouped="True">
+                        IsGrouped="True"
+                        RemainingItemsThresholdReachedCommand="{Binding UpdateCollectionCommand}"
+                        RemainingItemsThreshold="5">
             
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="models:GroupCalculatedData">
