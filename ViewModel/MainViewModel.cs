@@ -24,14 +24,14 @@ public partial class MainViewModel : ObservableObject
             if (group == null)
             {
                 group = new GroupCalculatedData(value.Date, new());
-                GroupData.Add(group);
+                GroupData.Insert(0, group);
             }
 
             if (group.FirstOrDefault(x => x.Id == value.Id) == null)
             {
                 group.Insert(0, value);
             }
-
+            
             GroupChanged?.Invoke("InsertOrUpdate");
         } 
     }
